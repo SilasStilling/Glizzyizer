@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"c:/Users/Silas Stilling/source/repos/NewPlug\" log --oneline -5)"
+    ]
+  }
+}
