@@ -27,7 +27,8 @@ private:
     juce::ToggleButton onionsButton { "ONIONS" };
     juce::AudioProcessorValueTreeState::ButtonAttachment onionsAttach;
 
-    juce::Label title;
+    juce::Image       logo;
+    juce::Rectangle<int> logoBounds;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GlizzyizerEditor)
 };

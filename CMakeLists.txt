@@ -36,6 +36,13 @@ target_sources(Glizzyizer PRIVATE
     source/ui/KnobComponent.cpp
 )
 
+juce_add_binary_data(GlizzyizerAssets
+    HEADER_NAME BinaryData.h
+    NAMESPACE   BinaryData
+    SOURCES
+        resources/glizzyizer_logo.png
+)
+
 target_compile_definitions(Glizzyizer PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
@@ -44,6 +51,7 @@ target_compile_definitions(Glizzyizer PUBLIC
 
 target_link_libraries(Glizzyizer
     PRIVATE
+        GlizzyizerAssets
         juce::juce_audio_utils
         juce::juce_dsp
     PUBLIC

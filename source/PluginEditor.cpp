@@ -1,4 +1,5 @@
 #include "PluginEditor.h"
+#include <BinaryData.h>
 
 GlizzyizerEditor::GlizzyizerEditor (GlizzyizerProcessor& p)
     : juce::AudioProcessorEditor (&p),
@@ -15,13 +16,10 @@ GlizzyizerEditor::GlizzyizerEditor (GlizzyizerProcessor& p)
     addAndMakeVisible (serve);
     addAndMakeVisible (onionsButton);
 
-    title.setText ("GLIZZYIZER", juce::dontSendNotification);
-    title.setJustificationType (juce::Justification::centred);
-    title.setFont (juce::Font (juce::FontOptions (28.0f).withStyle ("Bold")));
-    title.setColour (juce::Label::textColourId, GlizzyLookAndFeel::ketchupRed);
-    addAndMakeVisible (title);
+    logo = juce::ImageCache::getFromMemory (BinaryData::glizzyizer_logo_png,
+                                            BinaryData::glizzyizer_logo_pngSize);
 
-    setSize (520, 320);
+    setSize (520, 400);
 }
 
 GlizzyizerEditor::~GlizzyizerEditor()
@@ -45,12 +43,32 @@ void GlizzyizerEditor::paint (juce::Graphics& g)
 
     g.setColour (GlizzyLookAndFeel::grillCharcoal);
     g.drawRoundedRectangle (bounds.reduced (4.0f), 12.0f, 2.5f);
+
+    if (logo.isValid() && ! logoBounds.isEmpty())
+    {
+        const float imgRatio = (float) logo.getWidth() / (float) logo.getHeight();
+        const float boxRatio = (float) logoBounds.getWidth() / (float) logoBounds.getHeight();
+
+        auto target = logoBounds.toFloat();
+        if (imgRatio > boxRatio)
+        {
+            const float h = target.getWidth() / imgRatio;
+            target = target.withSizeKeepingCentre (target.getWidth(), h);
+        }
+        else
+        {
+            const float w = target.getHeight() * imgRatio;
+            target = target.withSizeKeepingCentre (w, target.getHeight());
+        }
+
+        g.drawImage (logo, target, juce::RectanglePlacement::centred);
+    }
 }
 
 void GlizzyizerEditor::resized()
 {
     auto area = getLocalBounds().reduced (16);
-    title.setBounds (area.removeFromTop (44));
+    logoBounds = area.removeFromTop (120);
 
     auto knobs = area.removeFromTop (200);
     const int knobW = knobs.getWidth() / 3;
