@@ -42,6 +42,7 @@ juce_add_binary_data(GlizzyizerAssets
     SOURCES
         resources/glizzyizer_logo.png
         resources/glizzyizer_background.png
+        resources/glizzyizer_sausage.png
 )
 
 target_compile_definitions(Glizzyizer PUBLIC

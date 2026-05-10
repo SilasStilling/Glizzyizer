@@ -29,7 +29,9 @@ private:
 
     juce::Image       background;
     juce::Image       logo;
+    juce::Image       sausage;
     juce::Rectangle<int> logoBounds;
+    juce::Rectangle<int> sausageBounds;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GlizzyizerEditor)
 };

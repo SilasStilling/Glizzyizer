@@ -12,8 +12,10 @@ GlizzyLookAndFeel::GlizzyLookAndFeel()
     setColour (juce::Slider::rotarySliderFillColourId,    mustardYellow);
     setColour (juce::Slider::rotarySliderOutlineColourId, grillCharcoal);
     setColour (juce::Slider::thumbColourId,               ketchupRed);
-    setColour (juce::Label::textColourId,                 grillCharcoal);
-    setColour (juce::ToggleButton::textColourId,          grillCharcoal);
+    setColour (juce::Slider::textBoxTextColourId,         onionWhite);
+    setColour (juce::Slider::textBoxOutlineColourId,      juce::Colours::transparentBlack);
+    setColour (juce::Label::textColourId,                 onionWhite);
+    setColour (juce::ToggleButton::textColourId,          onionWhite);
     setColour (juce::ToggleButton::tickColourId,          ketchupRed);
 }
 
@@ -21,43 +23,73 @@ void GlizzyLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
                                           float sliderPos, float startAngle, float endAngle,
                                           juce::Slider& slider)
 {
-    const auto bounds = juce::Rectangle<int> (x, y, width, height).toFloat().reduced (6.0f);
+    const auto bounds = juce::Rectangle<int> (x, y, width, height).toFloat().reduced (8.0f);
     const auto centre = bounds.getCentre();
-    const auto radius = juce::jmin (bounds.getWidth(), bounds.getHeight()) * 0.5f;
+    const float fullR = juce::jmin (bounds.getWidth(), bounds.getHeight()) * 0.5f;
     const float angle = startAngle + sliderPos * (endAngle - startAngle);
 
-    juce::Path body;
-    body.addEllipse (centre.x - radius, centre.y - radius, radius * 2.0f, radius * 2.0f);
+    // 1) Drop shadow under the knob
+    {
+        juce::Path shadow;
+        shadow.addEllipse (centre.x - fullR, centre.y - fullR + 5.0f, fullR * 2.0f, fullR * 2.0f);
+        g.setColour (juce::Colours::black.withAlpha (0.55f));
+        g.fillPath (shadow);
+    }
 
-    juce::ColourGradient grad (bunBeige.brighter (0.2f),  centre.x, centre.y - radius,
-                               bunBeige.darker   (0.35f), centre.x, centre.y + radius, false);
-    g.setGradientFill (grad);
-    g.fillPath (body);
+    // 2) Outer dark ring (bezel base)
+    const float ringR = fullR;
+    g.setColour (juce::Colour (0xFF161616));
+    g.fillEllipse (centre.x - ringR, centre.y - ringR, ringR * 2.0f, ringR * 2.0f);
 
-    g.setColour (grillCharcoal);
-    g.strokePath (body, juce::PathStrokeType (2.0f));
+    // 3) Bezel ring with vertical light gradient (top-lit cylinder feel)
+    const float bezelR = ringR - 4.0f;
+    juce::ColourGradient bezel (juce::Colour (0xFF5A5A5A), centre.x, centre.y - bezelR,
+                                juce::Colour (0xFF1B1B1B), centre.x, centre.y + bezelR, false);
+    g.setGradientFill (bezel);
+    g.fillEllipse (centre.x - bezelR, centre.y - bezelR, bezelR * 2.0f, bezelR * 2.0f);
 
-    juce::Path arc;
-    arc.addCentredArc (centre.x, centre.y, radius - 8.0f, radius - 8.0f,
-                       0.0f, startAngle, endAngle, true);
-    g.setColour (grillCharcoal.withAlpha (0.25f));
-    g.strokePath (arc, juce::PathStrokeType (3.0f, juce::PathStrokeType::curved,
-                                              juce::PathStrokeType::rounded));
+    // 5) Main body — slightly inset, darker, also top-lit
+    const float bodyR = bezelR - 4.0f;
+    juce::ColourGradient body (juce::Colour (0xFF3C3C3C), centre.x, centre.y - bodyR,
+                               juce::Colour (0xFF0C0C0C), centre.x, centre.y + bodyR, false);
+    g.setGradientFill (body);
+    g.fillEllipse (centre.x - bodyR, centre.y - bodyR, bodyR * 2.0f, bodyR * 2.0f);
 
-    juce::Path fill;
-    fill.addCentredArc (centre.x, centre.y, radius - 8.0f, radius - 8.0f,
-                        0.0f, startAngle, angle, true);
+    // 5b) Soft top highlight to fake brushed metal sheen
+    {
+        juce::ColourGradient sheen (juce::Colours::white.withAlpha (0.18f),
+                                    centre.x, centre.y - bodyR * 0.95f,
+                                    juce::Colours::transparentWhite,
+                                    centre.x, centre.y - bodyR * 0.05f, false);
+        g.setGradientFill (sheen);
+        g.fillEllipse (centre.x - bodyR, centre.y - bodyR, bodyR * 2.0f, bodyR * 2.0f);
+    }
+
+    // 6) Inner edge stroke (thin charcoal line for definition)
+    g.setColour (juce::Colour (0xFF000000).withAlpha (0.6f));
+    g.drawEllipse (centre.x - bodyR, centre.y - bodyR, bodyR * 2.0f, bodyR * 2.0f, 1.0f);
+
+    // 7) Value arc — track + filled portion in mustard
+    const float arcR = ringR + 5.0f;
+    juce::Path track;
+    track.addCentredArc (centre.x, centre.y, arcR, arcR, 0.0f, startAngle, endAngle, true);
+    g.setColour (juce::Colours::black.withAlpha (0.55f));
+    g.strokePath (track, juce::PathStrokeType (3.0f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+
+    juce::Path val;
+    val.addCentredArc (centre.x, centre.y, arcR, arcR, 0.0f, startAngle, angle, true);
     g.setColour (mustardYellow);
-    g.strokePath (fill, juce::PathStrokeType (3.0f, juce::PathStrokeType::curved,
-                                               juce::PathStrokeType::rounded));
+    g.strokePath (val, juce::PathStrokeType (3.0f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
 
-    juce::Path indicator;
-    const float pointerLen = radius - 14.0f;
-    const float pointerWid = 3.0f;
-    indicator.addRoundedRectangle (-pointerWid * 0.5f, -radius + 6.0f,
-                                   pointerWid, pointerLen, 1.5f);
-    g.setColour (ketchupRed);
-    g.fillPath (indicator, juce::AffineTransform::rotation (angle).translated (centre.x, centre.y));
+    // 8) Indicator pip — short bright bar near top, rotates with value
+    {
+        const float pipLen = bodyR * 0.32f;
+        const float pipWid = 3.0f;
+        juce::Path pip;
+        pip.addRoundedRectangle (-pipWid * 0.5f, -bodyR + 5.0f, pipWid, pipLen, 1.5f);
+        g.setColour (juce::Colours::white.withAlpha (0.92f));
+        g.fillPath (pip, juce::AffineTransform::rotation (angle).translated (centre.x, centre.y));
+    }
 
     juce::ignoreUnused (slider);
 }

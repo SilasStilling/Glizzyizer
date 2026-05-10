@@ -22,6 +22,9 @@ GlizzyizerEditor::GlizzyizerEditor (GlizzyizerProcessor& p)
     logo = juce::ImageCache::getFromMemory (BinaryData::glizzyizer_logo_png,
                                             BinaryData::glizzyizer_logo_pngSize);
 
+    sausage = juce::ImageCache::getFromMemory (BinaryData::glizzyizer_sausage_png,
+                                               BinaryData::glizzyizer_sausage_pngSize);
+
     setSize (520, 400);
 }
 
@@ -47,25 +50,23 @@ void GlizzyizerEditor::paint (juce::Graphics& g)
         g.fillAll();
     }
 
-    if (logo.isValid() && ! logoBounds.isEmpty())
+    auto drawAspectFit = [&] (const juce::Image& img, juce::Rectangle<int> box)
     {
-        const float imgRatio = (float) logo.getWidth() / (float) logo.getHeight();
-        const float boxRatio = (float) logoBounds.getWidth() / (float) logoBounds.getHeight();
+        if (! img.isValid() || box.isEmpty()) return;
+        const float imgRatio = (float) img.getWidth() / (float) img.getHeight();
+        const float boxRatio = (float) box.getWidth()  / (float) box.getHeight();
 
-        auto target = logoBounds.toFloat();
+        auto target = box.toFloat();
         if (imgRatio > boxRatio)
-        {
-            const float h = target.getWidth() / imgRatio;
-            target = target.withSizeKeepingCentre (target.getWidth(), h);
-        }
+            target = target.withSizeKeepingCentre (target.getWidth(), target.getWidth() / imgRatio);
         else
-        {
-            const float w = target.getHeight() * imgRatio;
-            target = target.withSizeKeepingCentre (w, target.getHeight());
-        }
+            target = target.withSizeKeepingCentre (target.getHeight() * imgRatio, target.getHeight());
 
-        g.drawImage (logo, target, juce::RectanglePlacement::centred);
-    }
+        g.drawImage (img, target, juce::RectanglePlacement::centred);
+    };
+
+    drawAspectFit (logo,    logoBounds);
+    drawAspectFit (sausage, sausageBounds);
 }
 
 void GlizzyizerEditor::resized()
@@ -73,11 +74,13 @@ void GlizzyizerEditor::resized()
     auto area = getLocalBounds().reduced (16);
     logoBounds = area.removeFromTop (120);
 
-    auto knobs = area.removeFromTop (200);
+    auto knobs = area.removeFromTop (140).reduced (40, 0);
     const int knobW = knobs.getWidth() / 3;
-    girth  .setBounds (knobs.removeFromLeft (knobW).reduced (8));
-    mustard.setBounds (knobs.removeFromLeft (knobW).reduced (8));
-    serve  .setBounds (knobs.reduced (8));
+    girth  .setBounds (knobs.removeFromLeft (knobW).reduced (18, 8));
+    mustard.setBounds (knobs.removeFromLeft (knobW).reduced (18, 8));
+    serve  .setBounds (knobs.reduced (18, 8));
+
+    sausageBounds = area.removeFromTop (60);
 
     auto bottom = area;
     onionsButton.setBounds (bottom.withSizeKeepingCentre (180, 36));
