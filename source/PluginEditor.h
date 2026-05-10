@@ -27,6 +27,7 @@ private:
     juce::ToggleButton onionsButton { "ONIONS" };
     juce::AudioProcessorValueTreeState::ButtonAttachment onionsAttach;
 
+    juce::Image       background;
     juce::Image       logo;
     juce::Rectangle<int> logoBounds;
 

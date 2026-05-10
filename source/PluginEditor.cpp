@@ -16,6 +16,9 @@ GlizzyizerEditor::GlizzyizerEditor (GlizzyizerProcessor& p)
     addAndMakeVisible (serve);
     addAndMakeVisible (onionsButton);
 
+    background = juce::ImageCache::getFromMemory (BinaryData::glizzyizer_background_png,
+                                                   BinaryData::glizzyizer_background_pngSize);
+
     logo = juce::ImageCache::getFromMemory (BinaryData::glizzyizer_logo_png,
                                             BinaryData::glizzyizer_logo_pngSize);
 
@@ -31,18 +34,18 @@ void GlizzyizerEditor::paint (juce::Graphics& g)
 {
     auto bounds = getLocalBounds().toFloat();
 
-    juce::ColourGradient bg (GlizzyLookAndFeel::bunBeige.brighter (0.10f), 0.0f, 0.0f,
-                             GlizzyLookAndFeel::bunBeige.darker   (0.20f), 0.0f, bounds.getHeight(),
-                             false);
-    g.setGradientFill (bg);
-    g.fillAll();
-
-    g.setColour (GlizzyLookAndFeel::grillCharcoal.withAlpha (0.15f));
-    for (float y = 0.0f; y < bounds.getHeight(); y += 14.0f)
-        g.drawHorizontalLine ((int) y, 0.0f, bounds.getWidth());
-
-    g.setColour (GlizzyLookAndFeel::grillCharcoal);
-    g.drawRoundedRectangle (bounds.reduced (4.0f), 12.0f, 2.5f);
+    if (background.isValid())
+    {
+        g.drawImage (background, bounds, juce::RectanglePlacement::stretchToFit);
+    }
+    else
+    {
+        juce::ColourGradient bg (GlizzyLookAndFeel::bunBeige.brighter (0.10f), 0.0f, 0.0f,
+                                 GlizzyLookAndFeel::bunBeige.darker   (0.20f), 0.0f, bounds.getHeight(),
+                                 false);
+        g.setGradientFill (bg);
+        g.fillAll();
+    }
 
     if (logo.isValid() && ! logoBounds.isEmpty())
     {

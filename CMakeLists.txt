@@ -41,6 +41,7 @@ juce_add_binary_data(GlizzyizerAssets
     NAMESPACE   BinaryData
     SOURCES
         resources/glizzyizer_logo.png
+        resources/glizzyizer_background.png
 )
 
 target_compile_definitions(Glizzyizer PUBLIC
