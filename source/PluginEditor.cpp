@@ -25,7 +25,19 @@ GlizzyizerEditor::GlizzyizerEditor (GlizzyizerProcessor& p)
     sausage = juce::ImageCache::getFromMemory (BinaryData::glizzyizer_sausage_png,
                                                BinaryData::glizzyizer_sausage_pngSize);
 
-    setSize (520, 400);
+    girth.setIcon (juce::ImageCache::getFromMemory (BinaryData::glizzyizer_girth_png,
+                                                    BinaryData::glizzyizer_girth_pngSize));
+    mustard.setIcon (juce::ImageCache::getFromMemory (BinaryData::glizzyizer_mustard_png,
+                                                      BinaryData::glizzyizer_mustard_pngSize));
+    serve.setIcon (juce::ImageCache::getFromMemory (BinaryData::glizzyizer_serve_png,
+                                                    BinaryData::glizzyizer_serve_pngSize));
+
+    girth.setTooltip   ("Drives the signal into a tanh saturator. Higher = thicker, dirtier saturation.");
+    mustard.setTooltip ("Tilt EQ. Left = darker / heavier lows. Right = brighter / fizzier highs.");
+    serve.setTooltip   ("Output gain in dB. Final volume after the saturation chain.");
+    onionsButton.setTooltip ("Toggles a presence boost plus high-frequency stereo widener.");
+
+    setSize (540, 560);
 }
 
 GlizzyizerEditor::~GlizzyizerEditor()
@@ -67,21 +79,28 @@ void GlizzyizerEditor::paint (juce::Graphics& g)
 
     drawAspectFit (logo,    logoBounds);
     drawAspectFit (sausage, sausageBounds);
+
+    g.setColour (GlizzyLookAndFeel::onionWhite.withAlpha (0.55f));
+    g.setFont (juce::Font (juce::FontOptions (11.0f).withStyle ("Italic")));
+    g.drawText ("made by Silas Stilling",
+                creditBounds.reduced (8),
+                juce::Justification::bottomRight, false);
 }
 
 void GlizzyizerEditor::resized()
 {
-    auto area = getLocalBounds().reduced (16);
-    logoBounds = area.removeFromTop (120);
+    auto area = getLocalBounds().reduced (18);
+    logoBounds = area.removeFromTop (110);
 
-    auto knobs = area.removeFromTop (140).reduced (40, 0);
+    auto knobs = area.removeFromTop (240).reduced (40, 0);
     const int knobW = knobs.getWidth() / 3;
-    girth  .setBounds (knobs.removeFromLeft (knobW).reduced (18, 8));
-    mustard.setBounds (knobs.removeFromLeft (knobW).reduced (18, 8));
-    serve  .setBounds (knobs.reduced (18, 8));
+    girth  .setBounds (knobs.removeFromLeft (knobW).reduced (10, 4));
+    mustard.setBounds (knobs.removeFromLeft (knobW).reduced (10, 4));
+    serve  .setBounds (knobs.reduced (10, 4));
 
-    sausageBounds = area.removeFromTop (60);
+    sausageBounds = area.removeFromTop (70);
 
     auto bottom = area;
-    onionsButton.setBounds (bottom.withSizeKeepingCentre (180, 36));
+    onionsButton.setBounds (bottom.withSizeKeepingCentre (150, 110));
+    creditBounds = bottom;
 }

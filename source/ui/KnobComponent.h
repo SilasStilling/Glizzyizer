@@ -11,10 +11,16 @@ public:
                    const juce::String& label,
                    const juce::String& suffix = "");
 
+    void setIcon (juce::Image image);
+    void setTooltip (const juce::String& tip);
+
+    void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
     juce::Slider slider;
     juce::Label  caption;
+    juce::Image  icon;
+    juce::Rectangle<int> iconBounds;
     juce::AudioProcessorValueTreeState::SliderAttachment attachment;
 };
