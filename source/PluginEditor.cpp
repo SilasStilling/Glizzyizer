@@ -37,7 +37,7 @@ GlizzyizerEditor::GlizzyizerEditor (GlizzyizerProcessor& p)
     serve.setTooltip   ("Output gain in dB. Final volume after the saturation chain.");
     onionsButton.setTooltip ("Toggles a presence boost plus high-frequency stereo widener.");
 
-    setSize (540, 560);
+    setSize (960, 540);
 }
 
 GlizzyizerEditor::~GlizzyizerEditor()
@@ -79,28 +79,21 @@ void GlizzyizerEditor::paint (juce::Graphics& g)
 
     drawAspectFit (logo,    logoBounds);
     drawAspectFit (sausage, sausageBounds);
-
-    g.setColour (GlizzyLookAndFeel::onionWhite.withAlpha (0.55f));
-    g.setFont (juce::Font (juce::FontOptions (11.0f).withStyle ("Italic")));
-    g.drawText ("made by Silas Stilling",
-                creditBounds.reduced (8),
-                juce::Justification::bottomRight, false);
 }
 
 void GlizzyizerEditor::resized()
 {
-    auto area = getLocalBounds().reduced (18);
-    logoBounds = area.removeFromTop (110);
+    auto area = getLocalBounds().reduced (24);
+    logoBounds = area.removeFromTop (90);
 
-    auto knobs = area.removeFromTop (240).reduced (40, 0);
+    auto knobs = area.removeFromTop (200).reduced (60, 0);
     const int knobW = knobs.getWidth() / 3;
-    girth  .setBounds (knobs.removeFromLeft (knobW).reduced (10, 4));
-    mustard.setBounds (knobs.removeFromLeft (knobW).reduced (10, 4));
-    serve  .setBounds (knobs.reduced (10, 4));
+    girth  .setBounds (knobs.removeFromLeft (knobW).reduced (20, 4));
+    mustard.setBounds (knobs.removeFromLeft (knobW).reduced (20, 4));
+    serve  .setBounds (knobs.reduced (20, 4));
 
-    sausageBounds = area.removeFromTop (70);
+    sausageBounds = area.removeFromTop (50);
 
     auto bottom = area;
-    onionsButton.setBounds (bottom.withSizeKeepingCentre (150, 110));
-    creditBounds = bottom;
+    onionsButton.setBounds (bottom.withSizeKeepingCentre (240, 140));
 }

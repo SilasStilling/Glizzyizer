@@ -11,34 +11,48 @@ OnionsButton::OnionsButton() : juce::Button ("ONIONS")
 
 void OnionsButton::paintButton (juce::Graphics& g, bool isHighlighted, bool isDown)
 {
-    auto bounds = getLocalBounds().toFloat().reduced (2.0f);
+    auto bounds = getLocalBounds().toFloat().reduced (3.0f);
     const bool on = getToggleState();
 
-    auto imgBox = bounds.removeFromTop (bounds.getHeight() - 22.0f);
-    auto txtBox = bounds;
+    auto inner = bounds.reduced (10.0f);
 
-    if (on)
+    auto headerBox = inner.removeFromTop (24.0f);
+    g.setColour (GlizzyLookAndFeel::onionWhite.withAlpha (isHighlighted ? 1.0f : 0.92f));
+    g.setFont (juce::Font (juce::FontOptions (20.0f).withStyle ("Bold")));
+    g.drawText ("Onions", headerBox.toNearestInt(), juce::Justification::centred, false);
+
+    auto ledBox = inner.removeFromBottom (16.0f);
     {
-        const auto centre = imgBox.getCentre();
-        const float radius = juce::jmax (imgBox.getWidth(), imgBox.getHeight()) * 0.55f;
-        juce::ColourGradient glow (GlizzyLookAndFeel::relishGreen.withAlpha (0.55f),
+        const float ledR = 4.5f;
+        const auto centre = ledBox.getCentre();
+        const auto ledColour = on ? GlizzyLookAndFeel::relishGreen
+                                  : GlizzyLookAndFeel::ketchupRed;
+
+        juce::ColourGradient glow (ledColour.withAlpha (on ? 0.7f : 0.55f),
                                    centre.x, centre.y,
-                                   GlizzyLookAndFeel::relishGreen.withAlpha (0.0f),
-                                   centre.x + radius, centre.y, true);
+                                   ledColour.withAlpha (0.0f),
+                                   centre.x + ledR * 3.5f, centre.y, true);
         g.setGradientFill (glow);
-        g.fillRect (imgBox.expanded (10.0f));
+        g.fillRect (ledBox.expanded (10.0f, 6.0f));
+
+        g.setColour (ledColour);
+        g.fillEllipse (centre.x - ledR, centre.y - ledR, ledR * 2.0f, ledR * 2.0f);
+
+        g.setColour (juce::Colours::white.withAlpha (0.5f));
+        g.fillEllipse (centre.x - ledR * 0.45f, centre.y - ledR * 0.75f,
+                       ledR * 0.7f, ledR * 0.55f);
     }
 
-    if (image.isValid())
+    if (image.isValid() && ! inner.isEmpty())
     {
-        const float baseAlpha = on ? 1.0f : 0.40f;
+        const float baseAlpha = on ? 1.0f : 0.65f;
         const float boost     = isHighlighted ? 0.10f : 0.0f;
         g.setOpacity (juce::jlimit (0.0f, 1.0f, baseAlpha + boost));
 
         const float imgRatio = (float) image.getWidth() / (float) image.getHeight();
-        const float boxRatio = imgBox.getWidth() / imgBox.getHeight();
+        const float boxRatio = inner.getWidth() / inner.getHeight();
 
-        auto target = imgBox;
+        auto target = inner;
         if (imgRatio > boxRatio)
             target = target.withSizeKeepingCentre (target.getWidth(), target.getWidth() / imgRatio);
         else
@@ -49,8 +63,4 @@ void OnionsButton::paintButton (juce::Graphics& g, bool isHighlighted, bool isDo
         g.drawImage (image, target, juce::RectanglePlacement::centred);
         g.setOpacity (1.0f);
     }
-
-    g.setColour (on ? GlizzyLookAndFeel::relishGreen.brighter (0.2f) : GlizzyLookAndFeel::onionWhite);
-    g.setFont (juce::Font (juce::FontOptions (14.0f).withStyle ("Bold")));
-    g.drawFittedText ("ONIONS", txtBox.toNearestInt(), juce::Justification::centred, 1);
 }

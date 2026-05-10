@@ -33,7 +33,6 @@ private:
     juce::Image       sausage;
     juce::Rectangle<int> logoBounds;
     juce::Rectangle<int> sausageBounds;
-    juce::Rectangle<int> creditBounds;
 
     juce::TooltipWindow tooltipWindow { this, 600 };
 

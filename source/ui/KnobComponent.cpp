@@ -48,7 +48,7 @@ void KnobComponent::paint (juce::Graphics& g)
 void KnobComponent::resized()
 {
     auto area = getLocalBounds();
-    iconBounds = area.removeFromTop (80);
+    iconBounds = area.removeFromTop (60);
     caption.setBounds (area.removeFromTop (22));
     slider.setBounds  (area);
 }
