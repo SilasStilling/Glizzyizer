@@ -6,6 +6,7 @@
 #include "PluginProcessor.h"
 #include "ui/GlizzyLookAndFeel.h"
 #include "ui/KnobComponent.h"
+#include "ui/OnionsButton.h"
 
 class GlizzyizerEditor : public juce::AudioProcessorEditor
 {
@@ -24,7 +25,7 @@ private:
     KnobComponent mustard;
     KnobComponent serve;
 
-    juce::ToggleButton onionsButton { "ONIONS" };
+    OnionsButton onionsButton;
     juce::AudioProcessorValueTreeState::ButtonAttachment onionsAttach;
 
     juce::Image       background;
@@ -32,6 +33,9 @@ private:
     juce::Image       sausage;
     juce::Rectangle<int> logoBounds;
     juce::Rectangle<int> sausageBounds;
+    juce::Rectangle<int> creditBounds;
+
+    juce::TooltipWindow tooltipWindow { this, 600 };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GlizzyizerEditor)
 };

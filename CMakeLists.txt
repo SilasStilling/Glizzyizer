@@ -34,6 +34,7 @@ target_sources(Glizzyizer PRIVATE
     source/dsp/OnionStage.cpp
     source/ui/GlizzyLookAndFeel.cpp
     source/ui/KnobComponent.cpp
+    source/ui/OnionsButton.cpp
 )
 
 juce_add_binary_data(GlizzyizerAssets
@@ -43,6 +44,10 @@ juce_add_binary_data(GlizzyizerAssets
         resources/glizzyizer_logo.png
         resources/glizzyizer_background.png
         resources/glizzyizer_sausage.png
+        resources/glizzyizer_onions.png
+        resources/glizzyizer_girth.png
+        resources/glizzyizer_mustard.png
+        resources/glizzyizer_serve.png
 )
 
 target_compile_definitions(Glizzyizer PUBLIC
