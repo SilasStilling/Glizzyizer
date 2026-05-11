@@ -78,7 +78,8 @@ void GlizzyLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int w
 
     juce::Path val;
     val.addCentredArc (centre.x, centre.y, arcR, arcR, 0.0f, startAngle, angle, true);
-    g.setColour (mustardYellow);
+    const auto arcColour = mustardYellow.interpolatedWith (ketchupRed, juce::jlimit (0.0f, 1.0f, sliderPos));
+    g.setColour (arcColour);
     g.strokePath (val, juce::PathStrokeType (3.0f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
 
     // 8) Indicator pip — short bright bar near top, rotates with value
