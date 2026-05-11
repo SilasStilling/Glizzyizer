@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glizzyizer — saturation that hits like a stadium hot dog</title>
+<meta name="description" content="Glizzyizer is a free VST3 saturation/distortion plugin inspired by Sausage Fattener. Girth, Mustard, Flame Boost, Serve. Built with JUCE.">
+<meta property="og:title" content="Glizzyizer">
+<meta property="og:description" content="A free VST3 saturation plugin. Girth, Mustard, Flame Boost, Serve.">
+<meta property="og:image" content="assets/glizzyizer_logo.png">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="assets/glizzyizer_logo.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <img src="assets/glizzyizer_logo.png" alt="" class="brand-logo">
+      <span>Glizzyizer</span>
+    </a>
+    <div class="nav-links">
+      <a href="#controls">Controls</a>
+      <a href="#install">Install</a>
+      <a href="#build">Build</a>
+      <a href="https://github.com/SilasStilling/Glizzyizer" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-grain"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <span class="tag">VST3 · Standalone · Windows</span>
+      <h1>Saturation that hits like a <span class="hl">stadium hot dog</span>.</h1>
+      <p class="lede">Glizzyizer is a free saturation &amp; distortion plugin inspired by <em>Sausage Fattener</em>. Four knobs, no menus, all flavor. Built with JUCE.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/SilasStilling/Glizzyizer/releases/latest" target="_blank" rel="noopener">Download latest</a>
+        <a class="btn btn-ghost" href="#controls">See the controls</a>
+      </div>
+      <p class="small">Free · open source · MIT-style spirit.</p>
+    </div>
+    <div class="hero-art">
+      <img src="assets/glizzyizer_sausage.png" alt="Glizzyizer sausage mascot" class="sausage">
+      <img src="assets/glizzyizer_flame.png" alt="" class="flame" aria-hidden="true">
+    </div>
+  </div>
+</header>
+
+<section class="section" id="controls">
+  <div class="container">
+    <h2>The four knobs</h2>
+    <p class="section-lede">Everything you need, nothing you don't. Twist, hear it, move on.</p>
+    <div class="cards">
+      <article class="card">
+        <img src="assets/glizzyizer_girth.png" alt="" class="card-icon">
+        <h3>Girth</h3>
+        <p>Drives the signal into a tanh waveshaper. From subtle warmth to fat, harmonic crush.</p>
+      </article>
+      <article class="card">
+        <img src="assets/glizzyizer_mustard.png" alt="" class="card-icon">
+        <h3>Mustard</h3>
+        <p>Tilt EQ. Roll it down for darker, smokier color — push it up for bright, biting top end.</p>
+      </article>
+      <article class="card">
+        <img src="assets/glizzyizer_flame.png" alt="" class="card-icon">
+        <h3>Flame Boost</h3>
+        <p>Toggles a presence push plus a high-frequency stereo widener. Instantly bigger, instantly hotter.</p>
+      </article>
+      <article class="card">
+        <img src="assets/glizzyizer_serve.png" alt="" class="card-icon">
+        <h3>Serve</h3>
+        <p>Output gain in dB. Match levels after the saturation so your A/B is honest.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="install">
+  <div class="container narrow">
+    <h2>Install</h2>
+    <ol class="steps">
+      <li>Download the latest <code>Glizzyizer-x.y.z-Setup.exe</code> from the <a href="https://github.com/SilasStilling/Glizzyizer/releases/latest" target="_blank" rel="noopener">releases page</a>.</li>
+      <li>Run the installer (admin required — it copies the plugin into <code>C:\Program Files\Common Files\VST3</code>).</li>
+      <li>In FL Studio: <strong>Options → Manage plugins → Find more plugins</strong>. Glizzyizer shows up under <em>NewPlug</em>.</li>
+      <li>Drop it on a channel. Twist Girth. Smile.</li>
+    </ol>
+    <p class="small">Tested in FL Studio. Should work in any VST3 host on Windows x64.</p>
+  </div>
+</section>
+
+<section class="section" id="build">
+  <div class="container narrow">
+    <h2>Build from source</h2>
+    <p>You'll need Visual Studio 2022 with C++ workload, and Git.</p>
+<pre><code>git clone --recursive https://github.com/SilasStilling/Glizzyizer.git
+cd Glizzyizer
+cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+cmake --build build --config Release</code></pre>
+    <p>The VST3 ends up in <code>build\Glizzyizer_artefacts\Release\VST3\</code>. To build the installer, see <a href="https://github.com/SilasStilling/Glizzyizer/tree/main/installer" target="_blank" rel="noopener">installer/README.md</a>.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>Glizzyizer · made by <a href="https://github.com/SilasStilling" target="_blank" rel="noopener">SilasStilling</a> · powered by <a href="https://juce.com" target="_blank" rel="noopener">JUCE</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
