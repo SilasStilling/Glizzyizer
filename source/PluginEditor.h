@@ -6,7 +6,7 @@
 #include "PluginProcessor.h"
 #include "ui/GlizzyLookAndFeel.h"
 #include "ui/KnobComponent.h"
-#include "ui/OnionsButton.h"
+#include "ui/FlameBoostButton.h"
 
 class GlizzyizerEditor : public juce::AudioProcessorEditor
 {
@@ -25,8 +25,8 @@ private:
     KnobComponent mustard;
     KnobComponent serve;
 
-    OnionsButton onionsButton;
-    juce::AudioProcessorValueTreeState::ButtonAttachment onionsAttach;
+    FlameBoostButton flameBoostButton;
+    juce::AudioProcessorValueTreeState::ButtonAttachment flameBoostAttach;
 
     juce::Image       background;
     juce::Image       logo;

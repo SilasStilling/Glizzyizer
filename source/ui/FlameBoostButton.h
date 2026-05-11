@@ -2,10 +2,10 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-class OnionsButton : public juce::Button
+class FlameBoostButton : public juce::Button
 {
 public:
-    OnionsButton();
+    FlameBoostButton();
 
     void paintButton (juce::Graphics&, bool isHighlighted, bool isDown) override;
 
