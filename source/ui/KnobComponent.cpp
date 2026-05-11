@@ -7,12 +7,13 @@ KnobComponent::KnobComponent (juce::AudioProcessorValueTreeState& apvts,
     : attachment (apvts, parameterId, slider)
 {
     slider.setSliderStyle (juce::Slider::RotaryHorizontalVerticalDrag);
-    slider.setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 18);
+    slider.setTextBoxStyle (juce::Slider::TextBoxBelow, false, 96, 22);
     slider.setTextValueSuffix (suffix);
     addAndMakeVisible (slider);
 
     caption.setText (label, juce::dontSendNotification);
     caption.setJustificationType (juce::Justification::centred);
+    caption.setFont (juce::Font (juce::FontOptions (17.0f).withStyle ("Bold")));
     addAndMakeVisible (caption);
 }
 
@@ -48,7 +49,7 @@ void KnobComponent::paint (juce::Graphics& g)
 void KnobComponent::resized()
 {
     auto area = getLocalBounds();
-    iconBounds = area.removeFromTop (80);
-    caption.setBounds (area.removeFromTop (22));
+    iconBounds = area.removeFromTop (78);
+    caption.setBounds (area.removeFromTop (24));
     slider.setBounds  (area);
 }

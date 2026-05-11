@@ -7,14 +7,14 @@ GlizzyizerEditor::GlizzyizerEditor (GlizzyizerProcessor& p)
       girth   (p.apvts, GlizzyizerProcessor::girthId,   "GIRTH",   " %"),
       mustard (p.apvts, GlizzyizerProcessor::mustardId, "MUSTARD", " %"),
       serve   (p.apvts, GlizzyizerProcessor::serveId,   "SERVE",   " dB"),
-      onionsAttach (p.apvts, GlizzyizerProcessor::onionsId, onionsButton)
+      flameBoostAttach (p.apvts, GlizzyizerProcessor::onionsId, flameBoostButton)
 {
     setLookAndFeel (&laf);
 
     addAndMakeVisible (girth);
     addAndMakeVisible (mustard);
     addAndMakeVisible (serve);
-    addAndMakeVisible (onionsButton);
+    addAndMakeVisible (flameBoostButton);
 
     background = juce::ImageCache::getFromMemory (BinaryData::glizzyizer_background_png,
                                                    BinaryData::glizzyizer_background_pngSize);
@@ -35,9 +35,9 @@ GlizzyizerEditor::GlizzyizerEditor (GlizzyizerProcessor& p)
     girth.setTooltip   ("Drives the signal into a tanh saturator. Higher = thicker, dirtier saturation.");
     mustard.setTooltip ("Tilt EQ. Left = darker / heavier lows. Right = brighter / fizzier highs.");
     serve.setTooltip   ("Output gain in dB. Final volume after the saturation chain.");
-    onionsButton.setTooltip ("Toggles a presence boost plus high-frequency stereo widener.");
+    flameBoostButton.setTooltip ("Flame Boost — adds a presence lift and high-frequency stereo widener.");
 
-    setSize (540, 560);
+    setSize (960, 540);
 }
 
 GlizzyizerEditor::~GlizzyizerEditor()
@@ -79,28 +79,26 @@ void GlizzyizerEditor::paint (juce::Graphics& g)
 
     drawAspectFit (logo,    logoBounds);
     drawAspectFit (sausage, sausageBounds);
-
-    g.setColour (GlizzyLookAndFeel::onionWhite.withAlpha (0.55f));
-    g.setFont (juce::Font (juce::FontOptions (11.0f).withStyle ("Italic")));
-    g.drawText ("made by Silas Stilling",
-                creditBounds.reduced (8),
-                juce::Justification::bottomRight, false);
 }
 
 void GlizzyizerEditor::resized()
 {
-    auto area = getLocalBounds().reduced (18);
-    logoBounds = area.removeFromTop (110);
+    auto area = getLocalBounds().reduced (90, 0).withTrimmedTop (50).withTrimmedBottom (18);
+    logoBounds = area.removeFromTop (66);
 
-    auto knobs = area.removeFromTop (240).reduced (40, 0);
+    auto knobs = area.removeFromTop (176).reduced (20, 0);
     const int knobW = knobs.getWidth() / 3;
-    girth  .setBounds (knobs.removeFromLeft (knobW).reduced (10, 4));
-    mustard.setBounds (knobs.removeFromLeft (knobW).reduced (10, 4));
-    serve  .setBounds (knobs.reduced (10, 4));
+    girth  .setBounds (knobs.removeFromLeft (knobW).reduced (10, 2));
+    mustard.setBounds (knobs.removeFromLeft (knobW).reduced (10, 2));
+    serve  .setBounds (knobs.reduced (10, 2));
 
-    sausageBounds = area.removeFromTop (70);
+    area.removeFromTop (12);
+    sausageBounds = area.removeFromTop (40);
 
     auto bottom = area;
-    onionsButton.setBounds (bottom.withSizeKeepingCentre (150, 110));
-    creditBounds = bottom;
+    const int btnH = juce::jmin (170, bottom.getHeight());
+    const int btnW = 440;
+    flameBoostButton.setBounds (bottom.getCentreX() - btnW / 2,
+                                bottom.getBottom() - btnH,
+                                btnW, btnH);
 }
